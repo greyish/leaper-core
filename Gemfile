@@ -8,6 +8,7 @@ gem 'rails-api'
 group :development do
   gem 'spring'
   gem 'pry'
+  gem 'annotate', '~> 2.6.6'
 end
 
 

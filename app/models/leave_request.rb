@@ -8,9 +8,20 @@
 #  from          :date
 #  to            :date
 #  status        :string
+#  notes         :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #
 
 class LeaveRequest < ActiveRecord::Base
+  belongs_to :leave_type
+  belongs_to :employee
+
+  has_many :leave_reviews
+
+  after_create :populate_reviews
+
+  def populate_reviews
+    team = self.employee.team.populate_leave_reviews self
+  end
 end

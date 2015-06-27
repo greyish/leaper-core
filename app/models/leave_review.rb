@@ -12,4 +12,6 @@
 #
 
 class LeaveReview < ActiveRecord::Base
+  belongs_to :leave_request
+  belongs_to :employee
 end

@@ -15,4 +15,7 @@
 
 class Employee < ActiveRecord::Base
   belongs_to :user
+  belongs_to :team
+
+  has_many :leave_requests
 end

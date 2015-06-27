@@ -12,4 +12,12 @@
 
 class Team < ActiveRecord::Base
   belongs_to :user
+  has_many :employees
+
+  def populate_leave_reviews leave_request
+    self.employees.each do |emp|
+      leave_request.leave_reviews.create(:employee => emp)
+    end
+  end
+
 end

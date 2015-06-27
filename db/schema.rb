@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150627151053) do
+ActiveRecord::Schema.define(version: 20150627205950) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20150627151053) do
     t.string   "status"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.string   "notes"
   end
 
   create_table "leave_reviews", force: :cascade do |t|
@@ -56,10 +57,10 @@ ActiveRecord::Schema.define(version: 20150627151053) do
 
   create_table "leave_types", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "type"
-    t.string   "quota"
+    t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "quota"
   end
 
   create_table "teams", force: :cascade do |t|
@@ -68,6 +69,7 @@ ActiveRecord::Schema.define(version: 20150627151053) do
     t.integer  "user_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.integer  "admin_id"
   end
 
   create_table "users", force: :cascade do |t|

@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+
+  post 'users/login'
+
   resources :leave_reviews, except: [:new, :edit]
   resources :leave_requests, except: [:new, :edit]
   resources :leave_types, except: [:new, :edit]

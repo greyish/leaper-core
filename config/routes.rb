@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  resources :leave_reviews, except: [:new, :edit]
+  resources :leave_requests, except: [:new, :edit]
+  resources :leave_types, except: [:new, :edit]
+  resources :employees, except: [:new, :edit]
+  resources :teams, except: [:new, :edit]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

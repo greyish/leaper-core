@@ -5,12 +5,15 @@ gem 'rails', '4.2.1'
 
 gem 'rails-api'
 
-gem 'spring', :group => :development
+group :development do
+  gem 'spring'
+  gem 'pry'
+end
 
 
 gem 'pg'
 
-
+gem 'httparty'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

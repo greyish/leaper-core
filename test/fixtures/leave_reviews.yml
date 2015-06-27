@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  leave_request_id: 1
+  employee_id: 1
+  comment: MyString
+  is_approved: 
+
+two:
+  leave_request_id: 1
+  employee_id: 1
+  comment: MyString
+  is_approved: 

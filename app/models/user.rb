@@ -2,8 +2,6 @@ class User < ActiveRecord::Base
   has_many :employees
   has_many :teams
 
-  private
-
   def update_employees
     slack_url = "https://slack.com/api/users.list?token=#{self.slack_token}"
     resp = HTTParty.get(slack_url).as_json

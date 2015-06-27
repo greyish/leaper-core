@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'gateway/bouncer'
+
   post 'users/login'
 
   resources :leave_reviews, except: [:new, :edit]

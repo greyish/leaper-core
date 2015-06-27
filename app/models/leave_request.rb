@@ -21,6 +21,8 @@ class LeaveRequest < ActiveRecord::Base
 
   after_create :populate_reviews
 
+  scope :pending, -> {where(status: "Pending")}
+
   def populate_reviews
     team = self.employee.team.populate_leave_reviews self
   end

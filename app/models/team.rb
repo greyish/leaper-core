@@ -16,8 +16,12 @@ class Team < ActiveRecord::Base
 
   def populate_leave_reviews leave_request
     self.employees.each do |emp|
-      leave_request.leave_reviews.create(:employee => emp)
+      leave_request.leave_reviews.create(:employee => emp, :is_approved => false)
     end
+  end
+
+  def admin
+    Employee.find(self.admin_id)
   end
 
 end

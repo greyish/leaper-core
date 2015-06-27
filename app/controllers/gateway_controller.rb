@@ -13,13 +13,47 @@ class GatewayController < ApplicationController
 
     case @command
     when "reqleave"
+      opts = @opts.split(",")
+      @options = Hash[@valid_opts[0..-2].map.with_index {|opt, i| [opt, opts[i]]}]
+
       unless @leave_type = @leave_types.find_by_name(@options["LeaveType"])
         render text: "Invalid leave type. Available leave types are #{@leave_types.pluck(:name)}"
         return
       end
+
+      unless valid_options_provided_leave_request
+        render text: "Invalid number of options. Required options for #{@command} are #{@valid_opts.join(", ")}"
+        return
+      end
+
       leave_request_create(leave_request_params(params))
-      notify_team_and_admin
+      notify_admin
       render text: "Thanks for the Leave Request. Your Team Admin is notified for approval."
+    when "approveLeave", "askTeam"
+      unless @requester = Employee.find_by_slack_name(@opts.downcase)
+        render text: "Invalid UserName. We need Slack Username"
+        return
+      end
+
+      unless @leave_record = LeaveRequest.pending.find_by_employee_id(@requester)
+        render text: "The User has no pending leave requests. Perhaps misspelled?"
+        return
+      end
+
+      unless @employee.leave_reviews.where(:leave_request_id => @leave_record).first.is_approved
+        @leave_record.leave_reviews.where(:employee_id => @requester).first.update_attributes(:is_approved => true)
+        if @command == "approveLeave" and @employee == @team.admin
+          approve_team_behalf
+          render text: "Successfully Approved Leave for #{@requester.slack_name}."
+          return
+        elsif @command == "askTeam"
+          notify_team
+          render text: "Have asked team as you asked."
+          return
+        end
+      else
+        render text: "You have already approved the leave request for the User."
+      end
     end
   end
 
@@ -33,22 +67,23 @@ class GatewayController < ApplicationController
 
   def check_valid_params
     @command = params[:text].split(" ").flatten.first
-    valid_opts = VALID_COMMANDS[@command]
-    opts = params[:text].split(" ")[1]
+    @valid_opts = VALID_COMMANDS[@command]
+    @opts = params[:text].split(" ")[1]
 
-    unless opts
-      render text: "Please provide valid options. Required options for #{@command} are #{valid_opts.join(", ")}"
+    unless @opts
+      render text: "Please provide valid options. Required options for #{@command} are #{@valid_opts.join(", ")}"
       return
     end
-
-    if opts !~ /[a-zA-z]+,((\d{,2}-\d{,2}-\d{2,4}),){2}\D+/
-      render text: "Invalid Options. Required options and format for #{@command} are #{valid_opts.join(", ")}"
-    elsif opts.split(",").size < valid_opts.size - 1
-      render text: "Invalid number of options. Required options for #{@command} are #{valid_opts.join(", ")}"
-    end
-    opts = opts.split(",")
-    @options = Hash[valid_opts[0..-2].map.with_index {|opt, i| [opt, opts[i]]}]
   end
+
+  def valid_options_provided_leave_request
+    if @opts !~ /[a-zA-z]+,((\d{,2}-\d{,2}-\d{2,4}),){2}\D+/ or @opts.split(",").size < @valid_opts.size - 1
+      return false
+    else
+      return true
+    end
+  end
+
 
   def leave_request_params params
     return {

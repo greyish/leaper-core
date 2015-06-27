@@ -12,4 +12,5 @@ class UsersController < ApplicationController
   def show_user
     @user.as_json.except("email", "password", "slack_token", "webhook_url", "created_at", "updated_at")
   end
+
 end

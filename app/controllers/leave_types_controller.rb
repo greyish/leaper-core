@@ -1,10 +1,11 @@
 class LeaveTypesController < ApplicationController
   before_action :set_leave_type, only: [:show, :update, :destroy]
+  before_action :set_user
 
-  # GET /leave_types
-  # GET /leave_types.json
   def index
-    @leave_types = LeaveType.all
+    @leave_types = @user.leave_types.map{|lt|
+      lt.as_json.except("id", "user_id", "created_at", "updated_at")
+    }
 
     render json: @leave_types
   end
@@ -21,7 +22,7 @@ class LeaveTypesController < ApplicationController
     @leave_type = LeaveType.new(leave_type_params)
 
     if @leave_type.save
-      render json: @leave_type, status: :created, location: @leave_type
+      render json: {res_id: 1}
     else
       render json: @leave_type.errors, status: :unprocessable_entity
     end
@@ -54,6 +55,12 @@ class LeaveTypesController < ApplicationController
     end
 
     def leave_type_params
-      params.require(:leave_type).permit(:user_id, :type, :quota)
+      params.permit(:user_id, :name, :quota)
+    end
+
+    def set_user
+      unless @user = User.find_by_id(params[:user_id])
+        render json: {"error": "Invalid User Id"}
+      end
     end
 end

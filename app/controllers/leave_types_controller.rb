@@ -60,7 +60,7 @@ class LeaveTypesController < ApplicationController
 
     def set_user
       unless @user = User.find_by_id(params[:user_id])
-        render json: {"error": "Invalid User Id"}
+        render json: {"error" => "Invalid User Id"}
       end
     end
 end

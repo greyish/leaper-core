@@ -12,6 +12,7 @@ end
 
 
 gem 'pg'
+gem 'puma'
 
 gem 'httparty'
 

@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 20150627104523) do
   create_table "teams", force: :cascade do |t|
     t.string   "name"
     t.string   "channel_name"
-    t.integer  "employee_id"
+    t.integer  "user_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end

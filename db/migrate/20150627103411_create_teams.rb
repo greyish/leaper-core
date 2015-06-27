@@ -3,7 +3,7 @@ class CreateTeams < ActiveRecord::Migration
     create_table :teams do |t|
       t.string :name
       t.string :channel_name
-      t.integer :employee_id
+      t.integer :user_id
 
       t.timestamps null: false
     end

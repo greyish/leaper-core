@@ -1,11 +1,11 @@
 class User < ActiveRecord::Base
   has_many :employees
-  before_save :update_employees
 
   private
 
   def update_employees
-    resp = HTTParty.get("https://slack.com/api/users.list?token=xoxp-6936400343-6936400359-6936978661-51d769&pretty=1").as_json
+    slack_url = "https://slack.com/api/users.list?token=#{self.slack_token}"
+    resp = HTTParty.get(slack_url).as_json
     unless resp["ok"]
       Rails.logger.info "Error Fetching URL"
       return

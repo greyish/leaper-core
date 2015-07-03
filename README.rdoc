@@ -1,5 +1,0 @@
-== Leaper
-
-Leaper is a completely slack based leave management tool. Made as an hackathon project @ angelhack.com. Work in Progress.
-
-Designed as SOA, this is the api server of the app.
